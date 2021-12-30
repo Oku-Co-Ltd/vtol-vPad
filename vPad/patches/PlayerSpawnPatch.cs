@@ -55,14 +55,14 @@ namespace vPad.patches
 
             // tell the vPad to initialize using vehicle's MFD manager and homepage
             // >> TODO: may need to write one for each aircraft FYI
-            //var mfdManager = vehicle.GetComponentsInChildren<MFDManager>(true).First(elem => elem.name == "MFDManager");
-            var mfdManPrefab = vehicle.GetComponentsInChildren<MFDManager>(true).First(elem => elem.name == "MFDManager");
+            var mfdManager = vehicle.GetComponentsInChildren<MFDManager>(true).First(elem => elem.name == "MFDManager");
+                //var mfdManPrefab = vehicle.GetComponentsInChildren<MFDManager>(true).First(elem => elem.name == "MFDManager");
             // create our own MFD manager from the existing one
-            var mfdManager = Object.Instantiate(mfdManPrefab, vPadGo.transform);
+                //var mfdManager = Object.Instantiate(mfdManPrefab, vPadGo.transform);
             // add MFD component to manager and active-cycle it so it initializes everything
             mfdManager.gameObject.SetActive(false);
-            //mfdManager.mfds = new List<MFD>(mfdManager.mfds.Concat( new List<MFD>{vMfd} ));
-            mfdManager.mfds = new List<MFD>{vMfd};
+            mfdManager.mfds = new List<MFD>(mfdManager.mfds.Concat( new List<MFD>{vMfd} ));
+                //mfdManager.mfds = new List<MFD>{vMfd};
 
             // add brightness adjuster to the aircraft's MFDBrightnessAdjuster
             var mfdBrightAdjust = vehicle.GetComponentInChildren<MFDBrightnessAdjuster>(true);

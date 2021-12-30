@@ -39,7 +39,7 @@ namespace vPad.Util
                     var settings = JsonConvert.DeserializeObject<T>(temp);
                     if (settings.Version != typeof(T).Assembly.GetName().Version.ToString(3))
                     {
-                        ModDebug.Log("Saved settings are from previous version, updating to current");
+                        ModDebug.Log("Settings version mismatch, updating to current");
                         SaveToFile(modFolder, settings.Default());
                     }
                     vPadOku.Instance.HaveSettingsChanged.Value = false;

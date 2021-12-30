@@ -4,13 +4,13 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("vPad_oku")]
+[assembly: AssemblyTitle("Oku's vPad")]
 [assembly: AssemblyDescription("Adds a virtual portable MFD to aircraft.")]
-[assembly: AssemblyConfiguration("dev")]
+[assembly: AssemblyConfiguration("live")]
 [assembly: AssemblyCompany("Omnith LLC")]
 [assembly: AssemblyProduct("VTOLVR_Mod_Boilerplate")]
 [assembly: AssemblyCopyright("Copyright © okureya 2022")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("Oku's vPad, gottem")]
 [assembly: AssemblyCulture("")]
 
 // Setting ComVisible to false makes the types in this assembly not visible
