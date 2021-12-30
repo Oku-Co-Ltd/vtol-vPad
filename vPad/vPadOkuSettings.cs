@@ -29,9 +29,9 @@ namespace vPad
             Enabled.dictionary = new Dictionary<string, bool>
             {
                 {"F/A-26B", true},
-                {"F-45A", false},
-                {"AV-42C", false},
-                {"AH-94", false}
+                //{"F-45A", false},
+                {"AV-42C", true},
+                //{"AH-94", false}
             };
             return this;
         }
