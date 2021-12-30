@@ -9,6 +9,8 @@ namespace vPad.Util
     /// <summary> Interface to abstract away the mod settings. Makes it more modular. </summary>
     public interface IModSettings<out T>
     {
+        /// <summary> Returns the version of the assembly for this settings file. </summary>
+        string Version { get; set; }
         /// <summary> Returns a <see cref="T"/> instance, set to default values.
         /// Implementation is dependent on derived type. </summary>
         T Default();
@@ -35,6 +37,11 @@ namespace vPad.Util
                     string temp = File.ReadAllText(modFolder + @"\settings.json");
 
                     var settings = JsonConvert.DeserializeObject<T>(temp);
+                    if (settings.Version != typeof(T).Assembly.GetName().Version.ToString(3))
+                    {
+                        ModDebug.Log("Saved settings are from previous version, updating to current");
+                        SaveToFile(modFolder, settings.Default());
+                    }
                     vPadOku.Instance.HaveSettingsChanged.Value = false;
                     return settings;
                 }

@@ -52,10 +52,11 @@ namespace vPad
             // build a mod settings page
             ModDebug.Log("Building VTOL settings window");
             Settings modSettings = new Settings(this);
-            modSettings.CreateCustomLabel("vPad Settings // cc. okureya");
+            modSettings.CreateCustomLabel($"vPad {Settings.Version} // cc. okureya");
             modSettings.CreateCustomLabel("");
             modSettings.CreateCustomLabel("Aircraft Enable");
             modSettings.CreateCustomLabel("> What aircraft should the vPad be enabled for?");
+            var defaultSettings = new vPadOkuSettings().Default();
             // hook up some runtime stuff and build page at the same time
             foreach (var kvp in Settings.Enabled.dictionary)
             {
@@ -69,12 +70,18 @@ namespace vPad
                 Settings.EnableActions.Add(kvp.Key, Action);
                 // then build a setting entry that hooks up to it
                 modSettings.CreateCustomLabel($"{kvp.Key}:");
-                var defaultSettings = new vPadOkuSettings().Default();
                 modSettings.CreateBoolSetting(
                     $"(Default = {defaultSettings.Enabled.dictionary[kvp.Key].ToString()})",
                     Settings.EnableActions[kvp.Key], Settings.Enabled.dictionary[kvp.Key]);
             }
             modSettings.CreateCustomLabel("<< additional plane support on the way! soon... >>");
+            modSettings.CreateCustomLabel("vPad Scale:");
+            Settings.ScaleAction = val =>
+            {
+                Settings.vPadScale = val;
+                HaveSettingsChanged.Value = true;
+            };
+            modSettings.CreateFloatSetting($"(Default = {defaultSettings.vPadScale})", Settings.ScaleAction, Settings.vPadScale, 0.6f, 1.4f, 0.05f);
 
             // when HaveSettingsChanged is modified, this will run every time
             HaveSettingsChanged.AsObservable().Subscribe(OnSettingsChanged);
