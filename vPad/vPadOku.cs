@@ -71,6 +71,7 @@ namespace vPad
                 modSettings.CreateCustomLabel($"{kvp.Key}:");
                 modSettings.CreateBoolSetting($"(Default = {kvp.Value.ToString()})", Settings.EnableActions[kvp.Key], Settings.Enabled.dictionary[kvp.Key]);
             }
+            modSettings.CreateCustomLabel("<< ** only the F/A-26B is currently supported! ** >>");
             modSettings.CreateCustomLabel("<< modded plane support on the way! soon... >>");
 
             // when HaveSettingsChanged is modified, this will run every time
