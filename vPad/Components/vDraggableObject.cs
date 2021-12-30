@@ -91,8 +91,8 @@ namespace vPad.Components
             if (!hasSetInitialTargetPos)
             {
                 Transform parent = TargetGripGo.transform.parent;
-                // position the target initially 0.4m in front of the player's face
-                Vector3 position2 = VRHead.instance.transform.position + parent.forward * 0.4f;
+                // position the target initially 0.4m in front of and above spawn location
+                Vector3 position2 = VRHead.instance.transform.position + parent.forward * 0.4f + parent.up * 0.4f;
                 Vector3 direction2 = -parent.forward;
                 Vector3 up = parent.up;
                 localTargetPos = parent.InverseTransformPoint(position2);
