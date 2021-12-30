@@ -1,4 +1,4 @@
-﻿/* Copyright 2022 okureya, Omnith LLC. Attributes CC-BY 3.0 */
+﻿/* Copyright 2022 okureya, Omnith LLC. */
 
 using System;
 using UnityEngine;
