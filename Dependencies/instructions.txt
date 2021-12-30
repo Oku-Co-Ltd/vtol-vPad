@@ -1,0 +1,6 @@
+Dependencies Needed
+	Assembly-CSharp.dll
+	ModLoader.dll
+	UnityEngine.CoreModule.dll
+	UnityEngine.dll
+	UniRx.dll
