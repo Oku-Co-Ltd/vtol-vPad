@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("vPad_oku")]
-[assembly: AssemblyDescription("Adds a virtual portable MFD to the F/A-26B.")]
+[assembly: AssemblyDescription("Adds a virtual portable MFD to aircraft.")]
 [assembly: AssemblyConfiguration("dev")]
 [assembly: AssemblyCompany("Omnith LLC")]
 [assembly: AssemblyProduct("VTOLVR_Mod_Boilerplate")]
