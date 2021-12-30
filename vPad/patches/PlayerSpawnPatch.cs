@@ -1,8 +1,10 @@
 ﻿/* Written by okureya // Omnith LLC */
 
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Harmony;
+using UnityEngine.UI;
 using vPad.Components;
 using vPad.Util;
 
@@ -16,6 +18,11 @@ namespace vPad.patches
             if (!VTScenario.current.vehicle.vehiclePrefab)
             {
                 ModDebug.LogWarning("No selected vehicle present! Not loading vPad");
+                return;
+            }
+            if (!__instance.isLocal)
+            {
+                ModDebug.Log($"Skipping non-local actor '{__instance.actor.actorName}'");
                 return;
             }
 
@@ -47,8 +54,19 @@ namespace vPad.patches
             var mfdManager = vehicle.GetComponentInChildren<MFDManager>(true);
             // add MFD component to manager and active-cycle it so it initializes everything
             mfdManager.gameObject.SetActive(false);
-            mfdManager.mfds.Add(vMfd);
+            mfdManager.mfds = new List<MFD>(mfdManager.mfds.Concat( new List<MFD>{vMfd} ));
+            // add brightness adjuster to MFDBrightnessAdjuster
+            var mfdBrightAdjust = vehicle.GetComponentInChildren<MFDBrightnessAdjuster>(true);
+            var brightImg = vPadGo.GetComponentsInChildren<Image>().First(elem => elem.name.Contains("brightness"));
+            mfdBrightAdjust.images = mfdBrightAdjust.images.AddToArray(brightImg);
+
             mfdManager.gameObject.SetActive(true);
+
+            //mfdManager.mfds.Add(vMfd);
+            //vMfd.Initialize(
+            //    mfdManager,
+            //    Object.Instantiate(mfdManager.homepagePrefab).GetComponent<MFDPage>()
+            //);
 
             // add functionality to VR Interactable for vPad grip (redundant if the interactable is on the root object)
             var objInt = vPadGo.GetComponentsInChildren<VRInteractable>()
