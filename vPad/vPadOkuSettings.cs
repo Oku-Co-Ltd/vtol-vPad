@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine.Events;
 using vPad.Util;
 
@@ -11,9 +12,13 @@ namespace vPad
     [Serializable]
     public sealed class vPadOkuSettings : IModSettings<vPadOkuSettings>
     {
+        public string Version { get; set; }
+
         public SerializableDictionary<string, bool> Enabled;
+        public float vPadScale = 1f;
 
         [NonSerialized] public Dictionary<string, UnityAction<bool>> EnableActions;
+        [NonSerialized] public UnityAction<float> ScaleAction;
 
         public vPadOkuSettings()
         {
@@ -26,6 +31,7 @@ namespace vPad
         /// <inheritdoc cref="IModSettings{vPadOkuSettings}"/>
         public vPadOkuSettings Default()
         {
+            Version = typeof(vPadOkuSettings).Assembly.GetName().Version.ToString(3);
             Enabled.dictionary = new Dictionary<string, bool>
             {
                 {"F/A-26B", true},
@@ -33,6 +39,7 @@ namespace vPad
                 {"AV-42C", true},
                 //{"AH-94", false}
             };
+            vPadScale = 1.0f;
             return this;
         }
     }

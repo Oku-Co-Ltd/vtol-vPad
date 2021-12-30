@@ -46,6 +46,8 @@ namespace vPad.patches
             var vehicleRb = t.Field("vehicleRb").GetValue<Rigidbody>();
             GameObject vehicle = vehicleRb.gameObject;
             GameObject vPadGo = Object.Instantiate(vPadOku.Instance.vPadPrefab, vehicle.transform);
+            var setScale = vPadOku.Settings.vPadScale;
+            vPadGo.transform.localScale = new Vector3(setScale,setScale,setScale);
             
             // use vehicle's properties for MFD
             var vMfd = vPadGo.GetComponentInChildren<MFD>();
