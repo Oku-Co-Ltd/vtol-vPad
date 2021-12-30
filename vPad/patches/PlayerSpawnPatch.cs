@@ -51,7 +51,8 @@ namespace vPad.patches
             var vMfd = vPadGo.GetComponentInChildren<MFD>();
             vMfd.battery = vehicle.GetComponentInChildren<Battery>();
             // tell the vPad to initialize using vehicle's MFD manager and homepage
-            var mfdManager = vehicle.GetComponentInChildren<MFDManager>(true);
+            // >> may need to write one for each aircraft FYI
+            var mfdManager = vehicle.GetComponentsInChildren<MFDManager>(true).First(elem => elem.name == "MFDManager");
             // add MFD component to manager and active-cycle it so it initializes everything
             mfdManager.gameObject.SetActive(false);
             mfdManager.mfds = new List<MFD>(mfdManager.mfds.Concat( new List<MFD>{vMfd} ));
