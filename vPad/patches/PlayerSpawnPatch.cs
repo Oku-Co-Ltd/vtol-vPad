@@ -50,24 +50,24 @@ namespace vPad.patches
             // use vehicle's properties for MFD
             var vMfd = vPadGo.GetComponentInChildren<MFD>();
             vMfd.battery = vehicle.GetComponentInChildren<Battery>();
+
             // tell the vPad to initialize using vehicle's MFD manager and homepage
-            // >> may need to write one for each aircraft FYI
-            var mfdManager = vehicle.GetComponentsInChildren<MFDManager>(true).First(elem => elem.name == "MFDManager");
+            // >> TODO: may need to write one for each aircraft FYI
+            //var mfdManager = vehicle.GetComponentsInChildren<MFDManager>(true).First(elem => elem.name == "MFDManager");
+            var mfdManPrefab = vehicle.GetComponentsInChildren<MFDManager>(true).First(elem => elem.name == "MFDManager");
+            // create our own MFD manager from the existing one
+            var mfdManager = Object.Instantiate(mfdManPrefab, vPadGo.transform);
             // add MFD component to manager and active-cycle it so it initializes everything
             mfdManager.gameObject.SetActive(false);
-            mfdManager.mfds = new List<MFD>(mfdManager.mfds.Concat( new List<MFD>{vMfd} ));
-            // add brightness adjuster to MFDBrightnessAdjuster
+            //mfdManager.mfds = new List<MFD>(mfdManager.mfds.Concat( new List<MFD>{vMfd} ));
+            mfdManager.mfds = new List<MFD>{vMfd};
+
+            // add brightness adjuster to the aircraft's MFDBrightnessAdjuster
             var mfdBrightAdjust = vehicle.GetComponentInChildren<MFDBrightnessAdjuster>(true);
             var brightImg = vPadGo.GetComponentsInChildren<Image>().First(elem => elem.name.Contains("brightness"));
             mfdBrightAdjust.images = mfdBrightAdjust.images.AddToArray(brightImg);
 
             mfdManager.gameObject.SetActive(true);
-
-            //mfdManager.mfds.Add(vMfd);
-            //vMfd.Initialize(
-            //    mfdManager,
-            //    Object.Instantiate(mfdManager.homepagePrefab).GetComponent<MFDPage>()
-            //);
 
             // add functionality to VR Interactable for vPad grip (redundant if the interactable is on the root object)
             var objInt = vPadGo.GetComponentsInChildren<VRInteractable>()
