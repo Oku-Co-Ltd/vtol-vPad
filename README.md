@@ -1,6 +1,6 @@
 # vPad: A virtual portable MFD for VTOL VR
 
-This is a mod for VTOL VR. Currently works for the public beta branch, and soon the stable patch to be released on 1/6/2022.
+This is a mod for VTOL VR that adds a moveable tablet display hooked up to the MFD system in an aircraft.
 
 This repository contains organized boilerplate for and examples of mod settings. Highly recommended!
 
