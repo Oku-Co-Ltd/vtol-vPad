@@ -1,5 +1,6 @@
 ﻿/* Written by okureya // Omnith LLC */
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -7,6 +8,7 @@ using Harmony;
 using UnityEngine.UI;
 using vPad.Components;
 using vPad.Util;
+using Object = UnityEngine.Object;
 
 namespace vPad.patches
 {
@@ -26,11 +28,20 @@ namespace vPad.patches
                 return;
             }
 
+            var vehicleName = VTScenario.current.vehicle.vehicleName;
             // check to see if we support this vehicle
-            if (!vPadOku.Settings.Enabled.dictionary.ContainsKey(VTScenario.current.vehicle.vehicleName))
+            if (!vPadOku.Settings.Enabled.dictionary.ContainsKey(vehicleName))
             {
-                ModDebug.Log($"The aircraft '{VTScenario.current.vehicle.vehicleName}' is not supported, breaking");
-                return;
+                // we'll go ahead and add it to be true by default
+                ModDebug.Log($"New aircraft '{vehicleName}', add to settings");
+                vPadOku.Settings.Enabled.dictionary.Add(vehicleName, true);
+                void Action(bool val)
+                {
+                    vPadOku.Settings.Enabled.dictionary[vehicleName] = val;
+                    vPadOku.Instance.HaveSettingsChanged.Value = true;
+                }
+                // add delegate to the actions dict
+                vPadOku.Settings.EnableActions.Add(vehicleName, Action);
             }
             // if we do, check to see if we have it enabled
             if (!vPadOku.Settings.Enabled.dictionary[VTScenario.current.vehicle.vehicleName])
@@ -42,10 +53,10 @@ namespace vPad.patches
             ModDebug.Log("Instantiating vPad onto player vehicle...");
 
             // let's hook up the vPad right here to the vehicle
-            Traverse t = Traverse.Create(__instance);
+            var t = Traverse.Create(__instance);
             var vehicleRb = t.Field("vehicleRb").GetValue<Rigidbody>();
-            GameObject vehicle = vehicleRb.gameObject;
-            GameObject vPadGo = Object.Instantiate(vPadOku.Instance.vPadPrefab, vehicle.transform);
+            var vehicle = vehicleRb.gameObject;
+            var vPadGo = Object.Instantiate(vPadOku.Instance.vPadPrefab, vehicle.transform);
             var setScale = vPadOku.Settings.vPadScale;
             vPadGo.transform.localScale = new Vector3(setScale,setScale,setScale);
             
@@ -54,22 +65,34 @@ namespace vPad.patches
             vMfd.battery = vehicle.GetComponentInChildren<Battery>();
 
             // tell the vPad to initialize using vehicle's MFD manager and homepage
-            // >> TODO: may need to write one for each aircraft FYI
-            var mfdManager = vehicle.GetComponentsInChildren<MFDManager>(true).First(elem => elem.name == "MFDManager");
+            try
+            {
+                // test MFDManager first
+                var mfdManager = vehicle.GetComponentsInChildren<MFDManager>(true)
+                    .First(elem => elem.name == "MFDManager");
+
                 //var mfdManPrefab = vehicle.GetComponentsInChildren<MFDManager>(true).First(elem => elem.name == "MFDManager");
-            // create our own MFD manager from the existing one
+                // create our own MFD manager from the existing one
                 //var mfdManager = Object.Instantiate(mfdManPrefab, vPadGo.transform);
-            // add MFD component to manager and active-cycle it so it initializes everything
-            mfdManager.gameObject.SetActive(false);
-            mfdManager.mfds = new List<MFD>(mfdManager.mfds.Concat( new List<MFD>{vMfd} ));
+                // add MFD component to manager and active-cycle it so it initializes everything
+                mfdManager.gameObject.SetActive(false);
+                mfdManager.mfds = new List<MFD>(mfdManager.mfds.Concat(new List<MFD> {vMfd}));
                 //mfdManager.mfds = new List<MFD>{vMfd};
 
-            // add brightness adjuster to the aircraft's MFDBrightnessAdjuster
-            var mfdBrightAdjust = vehicle.GetComponentInChildren<MFDBrightnessAdjuster>(true);
-            var brightImg = vPadGo.GetComponentsInChildren<Image>().First(elem => elem.name.Contains("brightness"));
-            mfdBrightAdjust.images = mfdBrightAdjust.images.AddToArray(brightImg);
+                // add brightness adjuster to the aircraft's MFDBrightnessAdjuster
+                var mfdBrightAdjust = vehicle.GetComponentInChildren<MFDBrightnessAdjuster>(true);
+                var brightImg = vPadGo.GetComponentsInChildren<Image>().First(elem => elem.name.Contains("brightness"));
+                mfdBrightAdjust.images = mfdBrightAdjust.images.AddToArray(brightImg);
 
-            mfdManager.gameObject.SetActive(true);
+                mfdManager.gameObject.SetActive(true);
+            }
+            catch (Exception)
+            {
+                // else, try MFDPManager
+                var mfdpManager = vehicle.GetComponentsInChildren<MFDPortalManager>(true)
+                    .First(elem => elem.name == "MFDPManager");
+            }
+            
 
             // add functionality to VR Interactable for vPad grip (redundant if the interactable is on the root object)
             var objInt = vPadGo.GetComponentsInChildren<VRInteractable>()

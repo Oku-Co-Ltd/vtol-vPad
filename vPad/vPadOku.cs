@@ -30,13 +30,13 @@ namespace vPad
         /// <inheritdoc cref="VTOLMOD.ModLoaded"/>
         public override void ModLoaded()
         {
-            HarmonyInstance harmonyInstance = HarmonyInstance.Create("oku.vPad");
+            var harmonyInstance = HarmonyInstance.Create("oku.vPad");
             harmonyInstance.PatchAll();
 
             Instance = this;
 
             // load prefab from asset bundle
-            string pathToBundle = Path.Combine(ModFolder, vPadAssetBundle);
+            var pathToBundle = Path.Combine(ModFolder, vPadAssetBundle);
             ModDebug.Log($"Loading asset bundle from '{pathToBundle}'");
             var assetBundle = AssetBundle.LoadFromFile(pathToBundle);
             vPadPrefab = assetBundle.LoadAsset<GameObject>(vPadPrefabName);
@@ -51,7 +51,7 @@ namespace vPad
             Settings = ModSettingsUtil.LoadFromFile<vPadOkuSettings>(ModFolder);
             // build a mod settings page
             ModDebug.Log("Building VTOL settings window");
-            Settings modSettings = new Settings(this);
+            var modSettings = new Settings(this);
             modSettings.CreateCustomLabel($"vPad {Settings.Version} // cc. okureya");
             modSettings.CreateCustomLabel("");
             modSettings.CreateCustomLabel("Aircraft Enable");
@@ -74,7 +74,9 @@ namespace vPad
                     $"(Default = {defaultSettings.Enabled.dictionary[kvp.Key].ToString()})",
                     Settings.EnableActions[kvp.Key], Settings.Enabled.dictionary[kvp.Key]);
             }
-            modSettings.CreateCustomLabel("<< additional plane support on the way! soon... >>");
+            modSettings.CreateCustomLabel("<< how to make more planes appear: >>");
+            modSettings.CreateCustomLabel("<< 1. load into mission with plane >>");
+            modSettings.CreateCustomLabel("<< 2. restart game >>");
             modSettings.CreateCustomLabel("vPad Scale:");
             Settings.ScaleAction = val =>
             {
@@ -93,14 +95,14 @@ namespace vPad
         /// <summary>
         /// Called once per frame, as per default Unity MonoBehaviour procedure.
         /// </summary>
-        void Update()
+        private void Update()
         {
         }
 
         /// <summary>
         /// Called once per fixed time interval (e.g. physics), as per default Unity MonoBehaviour procedure.
         /// </summary>
-        void FixedUpdate()
+        private void FixedUpdate()
         {
         }
 
@@ -135,11 +137,9 @@ namespace vPad
         /// </summary>
         private void OnSettingsChanged(bool haveChanged)
         {
-            if (haveChanged)
-            {
-                ModDebug.Log("Settings were changed, saving changes!");
-                ModSettingsUtil.SaveToFile(ModFolder, Settings);
-            }
+            if (!haveChanged) return;
+            ModDebug.Log("Settings were changed, saving changes!");
+            ModSettingsUtil.SaveToFile(ModFolder, Settings);
         }
     }
 }

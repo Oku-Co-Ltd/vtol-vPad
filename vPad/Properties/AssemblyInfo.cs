@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("vPadOku")]
 [assembly: AssemblyDescription("Adds a virtual portable MFD to aircraft.")]
 [assembly: AssemblyConfiguration("live")]
-[assembly: AssemblyCompany("Omnith LLC")]
+[assembly: AssemblyCompany("Oku Co. Ltd.")]
 [assembly: AssemblyProduct("Oku's vPad")]
-[assembly: AssemblyCopyright("Copyright © okureya 2022")]
+[assembly: AssemblyCopyright("Copyright © Omnith LLC 2022")]
 [assembly: AssemblyTrademark("Oku's vPad, gottem")]
 [assembly: AssemblyCulture("")]
 
@@ -31,5 +31,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.9.8.0")]
+[assembly: AssemblyVersion("0.9.8.1")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
